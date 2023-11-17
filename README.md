@@ -79,6 +79,7 @@ _BENEFITs:_
 -	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
 
 _THINGs TO KEEP IN MIND:_
+
 Same as SCENARIO 1
 
 
@@ -100,6 +101,7 @@ _BENEFITs:_
 
 
 _THINGs TO KEEP IN MIND:_
+
 Same as SCENARIO 1
 
 
