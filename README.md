@@ -21,10 +21,10 @@ What moved you using Indirect-spoke?
 What was the reason behind this choice?
 
 In the recent past, some of the common reasons for moving you toward the usage of INDIRECT spoke model could have been the following:
-•	The kind of Firewall solution you like could not be integrated inside vWAN HUB
-•	The kind of Firewall solution you wanted to use could be integrated within vWAN HUB, but could not scale horizontally the same way as its VM-based solution could, or some specific feature was not present in the integrated version.
-•	You had necessity to perform inter-region traffic inspection through firewall, and **Routing Intent ** (https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies) feature was not there yet available 
-•	You were going to break the limitation of 1k BGP routes advertisable from Azure to Onpremise through ExpressRoute, due to presence of massive amount of spoke VNETs to be directly connected to your vWAN HUB
+-	The kind of Firewall solution you like could not be integrated inside vWAN HUB
+-	The kind of Firewall solution you wanted to use could be integrated within vWAN HUB, but could not scale horizontally the same way as its VM-based solution could, or some specific feature was not present in the integrated version.
+-	You had necessity to perform inter-region traffic inspection through firewall, and **Routing Intent** (https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies) feature was not there yet available 
+-	You were going to break the limitation of 1k BGP routes advertisable from Azure to Onpremise through ExpressRoute, due to presence of massive amount of spoke VNETs to be directly connected to your vWAN HUB
 The INDIRECT spoke model could offer possibility of FW filtering in Azure for all the traffic data-paths, except for Branch2Branch traffic.
 
 <pic of INDIRECT pre RI>
@@ -35,7 +35,7 @@ The INDIRECT spoke model helped with all the above challenges, but this kind of 
 •	Extra costs for VNET peerings
 
 
-Today, after the full availability of the Routing Intent feature and the possibility to integrate a lot of the most common Firewall brands inside vWAN HUBs (https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub#partners) are you still running an optimized network topology?
+Today, after the full availability of the **Routing Intent** feature and the possibility to integrate a lot of the most common Firewall brands inside vWAN HUBs (https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub#partners) are you still running an optimized network topology?
 Can you always safely move to an integrated solution?
 
 <pic of post RI DIRECT model>
@@ -43,29 +43,35 @@ Can you always safely move to an integrated solution?
 Well…as it often happens…there’s no easy answer to this question, and the world is not black or white 😊
 Let’s try to summarize all the possible scenarios where moving toward DIRECT spoke / integrated model is possible and optimal for you!
 
-IS IT TIME TO RECONSIDER MY TOPOLOGY?
+# IS IT TIME TO RECONSIDER MY TOPOLOGY?
+
 Without any doubt, moving toward DIRECT spoke connectivity model brings a lot of simplifications.
 •	Your firewall solution is integrated with the vWAN control plane
 •	The IP ranges of your spoke VNETs are automatically propagated to your branches and between HUBs, hence you don’t need to leverage on routes’ aggregations (static routes) nor you need to configure BGP between the vHUBs and any appliance.
 •	You reduce VNET peering costs
-•	With Routing Intent feature, you can leverage automatic Inter-HUB and Branch-2-Branch firewall filtering
+•	With **Routing Intent** feature, you can leverage automatic Inter-HUB and Branch-2-Branch firewall filtering
 …but this doesn’t mean that such migration is always possible, nor always recommended, depending on your needs.
 
-SCENARIO 1: MY FAVOURITE FIREWALL BRAND CANNOT BE INTEGRATED WITH vWAN
+## SCENARIO 1: MY FAVOURITE FIREWALL BRAND CANNOT BE INTEGRATED WITH vWAN
+
 <Pic 3rd party firewalls in spoke>
+
 If – for any reason – you need to use a firewall solution that is not in the list of the ones which you can integrate inside vHUB (https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub#partners) , the INDIRECT spoke model is likely still plausible and valid for you.
 
-BENEFITS:
-•	You can use the FW solution compatible with your needs
-•	You can scale your FW (or generally speaking, NVA) solution the way you prefer, either horizontally ( = more VMs in your cluster)  or vertically ( = changing your VMs SKU when possible)
-•	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
-THINGs TO KEEP IN MIND:
-•	If you are not using vWAN BGP endpoints (https://learn.microsoft.com/en-us/azure/virtual-wan/scenario-bgp-peering-hub) you need to be able to summarize/aggregate the IP ranges of the spoke VNETs connected to your transit HUB as static routes in the Default Route table of the vWAN HUB. In such case, keep in mind that Routing Intent will not be available at all on your vHUB: in fact, Routing Intent is incompatible with any kind of static route configured in the Default Route Table of a vHUB (https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies#knownlimitations )
-•	If you are using vWAN BGP endpoints, you either need an integration with Azure Route Server (ARS)* [see section below], or you still must be able to summarize/aggregate the IP ranges of the spoke VNETs connected to your transit HUB as BGP advertisement to the vHUB itself. With the BGP integration, if you don’t use any static route in vHUB, the Routing Intent feature is still an option you can use for Branch2Branch traffic filtering. With BGP integration, your firewall cluster can be active-passive only, since vHUB today (Nov. 2023) doesn’t still support BGP CUSTOM NEXT HOP feature.
-•	You will always need Route tables (UDRs) in your spoke VNETs, unless you deploy the integration with Azure Route Server (ARS)* [see section below]
+*BENEFITS*:
+-	You can use the FW solution compatible with your needs
+-	You can scale your FW (or generally speaking, NVA) solution the way you prefer, either horizontally ( = more VMs in your cluster)  or vertically ( = changing your VMs SKU when possible)
+-	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
 
-SCENARIO 2: MY FIREWALL BRAND CAN BE INTEGRATED, BUT I WANT FULL CONTROL ON IT
+*THINGs TO KEEP IN MIND*:
+-	If you are **not** using _vWAN BGP endpoints_ (https://learn.microsoft.com/en-us/azure/virtual-wan/scenario-bgp-peering-hub) you need to be able to summarize/aggregate the IP ranges of the spoke VNETs connected to your transit HUB as static routes in the Default Route table of the vWAN HUB. In such case, keep in mind that **Routing Intent** will not be available at all on your vHUB: in fact, **Routing Intent is incompatible with any kind of static route configured in the Default Route Table of a vHUB** (https://learn.microsoft.com/en-us/azure/virtual-wan/how-to-routing-policies#knownlimitations )
+-	If you are using vWAN BGP endpoints, you either need an **integration with Azure Route Server (ARS)*** [see section below], or you still must be able to summarize/aggregate the IP ranges of the spoke VNETs connected to your transit HUB as BGP advertisement to the vHUB itself. With the BGP integration, if you don’t use any static route in vHUB, the **Routing Intent** feature is still an option you can use for Branch2Branch traffic filtering. With BGP integration, your firewall cluster can be **active-passive only**, since vHUB today (Nov. 2023) doesn’t still support BGP _CUSTOM NEXT HOP_ feature.
+-	You will always need Route tables (UDRs) in your spoke VNETs, unless you deploy the **integration with Azure Route Server (ARS)*** [see section below]
+
+## SCENARIO 2: MY FIREWALL BRAND CAN BE INTEGRATED, BUT I WANT FULL CONTROL ON IT
+
 <Pic 3rd party firewalls in HUB>
+
 When you decide to leverage a FW solution which is integrated inside a vHUB, from one side you have all the facilitations of the integration, but from the other side you do not have the kind of control on the FW solution you could have with a VM-based deployment of the same in a spoke VNET. (see https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub )
 If you need the full control on your FW cluster solution, the INDIRECT spoke model is likely still plausible and valid for you.
 BENEFITs:
