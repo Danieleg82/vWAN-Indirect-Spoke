@@ -74,44 +74,44 @@ If – for any reason – you need to use a firewall solution that is not in the
 
 When you decide to leverage a FW solution which is integrated inside a vHUB, from one side you have all the facilitations of the integration, but from the other side you do not have the kind of control on the FW solution you could have with a VM-based deployment of the same in a spoke VNET. (see https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub )
 If you need the full control on your FW cluster solution, the INDIRECT spoke model is likely still plausible and valid for you.
-BENEFITs:
-•	You can scale your FW (or generally speaking, NVA) solution the way you prefer, either horizontally ( = more VMs in your cluster)  or vertically ( = changing your VMs SKU when possible)
-•	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
+_BENEFITs:_
+- You can scale your FW (or generally speaking, NVA) solution the way you prefer, either horizontally ( = more VMs in your cluster)  or vertically ( = changing your VMs SKU when possible)
+-	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
 
-THINGs TO KEEP IN MIND:
+_THINGs TO KEEP IN MIND:_
 Same as SCENARIO 1
 
 
-SCENARIO 3: I USE EXPRESSROUTE AND I PLAN TO INTEGRATE HUNDREDS OF SPOKE VNETs WITH MY CONNECTIVITY LAYER
+## SCENARIO 3: I USE EXPRESSROUTE AND I PLAN TO INTEGRATE HUNDREDS OF SPOKE VNETs WITH MY CONNECTIVITY LAYER
+
 If you’re an ExpressRoute user, the amount of routes advertised from Azure toward onprem is your enemy.
 Today, the limit is 1k routes.
 Every address space of every spoke VNET connected to vHUB represents one advertised route.
 In a scenario where your Azure environment is going to evolve toward hundreds (or more) of spoke VNETs connected to your vHUB (or vHUBs), you risk getting closer to the 1k advertised routes’ limit.
 This is even worse – of course – for scenarios where you have vWAN branch2branch enabled and you’re receiving as well BGP routes from branches, together with inter-hub routes.
 <Pic of hundreds spokes vHUB>
-In vWAN we have a feature  (currently in Preview) called Route Maps (https://learn.microsoft.com/en-us/azure/virtual-wan/route-maps-how-to)  which will alleviate such issue when it will go generally available, but today we can’t still rely on that.
+In vWAN we have a feature  (currently in Preview) called **Route Maps** (https://learn.microsoft.com/en-us/azure/virtual-wan/route-maps-how-to)  which will alleviate such issue when it will go generally available, but today we can’t still rely on that.
 In similar situations, the INDIRECT spoke model is likely still plausible and valid for you.
 
-BENEFITs:
-•	The vHUB (hence ExpressRoute circuit) will have no visibility over the network ranges of the spoke VNETs connected to your transit HUB, hence you won’t risk to exceed 1k routes
-•	You will be able to advertise over ExpressRoute only the aggregates of routes representing the super-net of your spoke networks (levering either BGP endpoint or static routes in vWAN)
-•	If you use BGP endpoint (no static routes in vWAN) this solution is compatible with the usage of an integrated vWAN FW solution and Routing Intent
+_BENEFITs:_
+-	The vHUB (hence ExpressRoute circuit) will have no visibility over the network ranges of the spoke VNETs connected to your transit HUB, hence you won’t risk to exceed 1k routes
+-	You will be able to advertise over ExpressRoute only the aggregates of routes representing the super-net of your spoke networks (levering either BGP endpoint or static routes in vWAN)
+-	If you use BGP endpoint (no static routes in vWAN) this solution is compatible with the usage of an integrated vWAN FW solution and Routing Intent
 
 
-THINGs TO KEEP IN MIND:
+_THINGs TO KEEP IN MIND:_
 Same as SCENARIO 1
 
 
-
-
-SUMMARY MATRIX
+## SUMMARY MATRIX
 The following matrix represents a possible approach toward DIRECT or INDIRECT spoke models depending on some common combinations of requirements.
 Note that what reported is valid today (Nov. 2023) and may be obsolete tomorrow…as per any discussion around cloud products 😊
 
+<>
  
-vWAN INTEGRATION WITH AZURE ROUTE SERVER
+# vWAN INTEGRATION WITH AZURE ROUTE SERVER
 
-Somebody told you that the integration between Azure Route Server and vWAN is impossible?
+Somebody told you that the integration between **Azure Route Server** and **vWAN** is impossible?
 Well…technically speaking, this is correct…but we have some workarounds that could make this possible, and this will simplify a lot the routing scenarios of INDIRECT spoke models.
 Look at this:
 
@@ -124,8 +124,8 @@ In this scenario:
 4.	We create a BGP peering between your virtual appliance in the Transit VNET and the ARS.
 5.	We create a BGP peering between your virtual appliance in the Transit VNET and the vHUB
 What happens after?
-•	All the address prefixes of your spoke VNETs will be advertised to the NVA, which will readvertise to the vHUB
-•	All the address prefixes coming from vHUB will be advertised to the NVA, which will readvertise to the ARS
+-	All the address prefixes of your spoke VNETs will be advertised to the NVA, which will readvertise to the vHUB
+- All the address prefixes coming from vHUB will be advertised to the NVA, which will readvertise to the ARS
 
 Result of all this?
 The result is that you will no longer need UDRs on your spoke VNETs: all the IP ranges coming from vHUB will automatically have the IP of your NVA (or the load balancer in front of it, if it’s a cluster) as nexthop.
@@ -133,5 +133,3 @@ Similarly, from the point of view of the vHUB, all the ranges of the spokes will
 As discussed previously, today you will be able to leverage this kind of setup only considering Active/Standby clusters of NVAs, since the BGP-endpoint technology between NVA and vHUB doesn’t support BGP custom-next-hops definitions… but this limitation is supposed to disappear within 2024.
 
 Basing on this, we can say that – even in scenarios where you had to stay sticky to the INDIRECT spoke model -  you still have possibility to simplify your routing with BGP and you’re not forced to the use of Static Routes in the vHUB’s route table and routes’ aggregation.
-
-
