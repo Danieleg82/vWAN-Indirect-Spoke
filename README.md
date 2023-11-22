@@ -30,9 +30,9 @@ The INDIRECT spoke model could offer possibility of FW filtering in Azure for al
 <pic of INDIRECT pre RI>
 
 The INDIRECT spoke model helped with all the above challenges, but this kind of setup also has some disadvantages, like:
-•	The loss of integration between the address ranges of your spoke VNETs and the connectivity HUB, which introduces the necessity of leveraging routes’ aggregation + static routes in vWAN, or BGP endpoints
-•	The need of Route Tables (UDRs) within your spoke VNETs used to redirect traffic toward your transit VNET’s virtual appliances.
-•	Extra costs for VNET peerings
+-	The loss of integration between the address ranges of your spoke VNETs and the connectivity HUB, which introduces the necessity of leveraging routes’ aggregation + static routes in vWAN, or BGP endpoints
+-	The need of Route Tables (UDRs) within your spoke VNETs used to redirect traffic toward your transit VNET’s virtual appliances.
+-	Extra costs for VNET peerings
 
 
 Today, after the full availability of the **Routing Intent** feature and the possibility to integrate a lot of the most common Firewall brands inside vWAN HUBs (https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub#partners) are you still running an optimized network topology?
