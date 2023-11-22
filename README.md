@@ -9,7 +9,7 @@ Once upon a time you decided that vWAN was the right connectivity service for yo
 
 **1)	A DIRECT spoke model**
 
-<Pic of vWAN direct spoke model>
+![](pics/Direct Spoke.jpg)
 
 **2)	An INDIRECT spoke model**
 
