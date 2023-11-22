@@ -9,11 +9,11 @@ Once upon a time you decided that vWAN was the right connectivity service for yo
 
 **1)	A DIRECT spoke model**
 
-![](pics/Direct Spoke.jpg)
+![](pics/Direct_Spoke.jpg)
 
 **2)	An INDIRECT spoke model**
 
-<Pic of vWAN indirect model>
+![](pics/Indirect_Spoke.jpg)
 
 In the INDIRECT spoke model, you basically “move” the FW solution outside the boundaries of the vHUB, and you connect your spoke VNETs to the vHUB “indirectly”, through a Transit HUB VNET.
 
