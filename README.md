@@ -86,7 +86,7 @@ Same as SCENARIO 1
 ## SCENARIO 3: I USE EXPRESSROUTE AND I PLAN TO INTEGRATE HUNDREDS OF SPOKE VNETs WITH MY CONNECTIVITY LAYER
 
 If you’re an ExpressRoute user, the amount of routes advertised from Azure toward onprem is your enemy.
-Today, the limit is 1k routes.
+Today, **the limit is 1000 routes.**
 Every address space of every spoke VNET connected to vHUB represents one advertised route.
 
 In a scenario where your Azure environment is going to evolve toward hundreds (or more) of spoke VNETs connected to your vHUB (or vHUBs), you risk getting closer to the 1k advertised routes’ limit.
