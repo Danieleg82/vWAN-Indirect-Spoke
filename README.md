@@ -110,7 +110,7 @@ Same as SCENARIO 1
 The following matrix represents a possible approach toward DIRECT or INDIRECT spoke models depending on some common combinations of requirements.
 Note that what reported is valid today (Nov. 2023) and may be obsolete tomorrow…as per any discussion around cloud products 😊
 
-![](matrix.xlsx)
+[MATRIX](matrix.xlsx)
  
 # vWAN INTEGRATION WITH AZURE ROUTE SERVER
 
