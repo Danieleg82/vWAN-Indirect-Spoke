@@ -92,8 +92,12 @@ Every address space of every spoke VNET connected to vHUB represents one adverti
 In a scenario where your Azure environment is going to evolve toward hundreds (or more) of spoke VNETs connected to your vHUB (or vHUBs), you risk getting closer to the 1k advertised routes’ limit.
 This is even worse – of course – for scenarios where you have vWAN branch2branch enabled and you’re receiving as well BGP routes from branches, together with inter-hub routes.
 
+![](pics/Direct_spoke_multispoke.jpg)
+
 In vWAN we have a feature  (currently in Preview) called **Route Maps** (https://learn.microsoft.com/en-us/azure/virtual-wan/route-maps-how-to)  which will alleviate such issue when it will go generally available, but today we can’t still rely on that.
 In similar situations, the INDIRECT spoke model is likely still plausible and valid for you.
+
+![](pics/Indirect_spoke_multispoke.jpg)
 
 _BENEFITs:_
 -	The vHUB (hence ExpressRoute circuit) will have no visibility over the network ranges of the spoke VNETs connected to your transit HUB, hence you won’t risk to exceed 1k routes
