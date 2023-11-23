@@ -131,13 +131,14 @@ In this scenario:
 4.	We create a BGP peering between your virtual appliance in the Transit VNET and the ARS.
 5.	We create a BGP peering between your virtual appliance in the Transit VNET and the vHUB
 What happens after?
+
 -	All the address prefixes of your spoke VNETs will be advertised to the NVA, which will readvertise to the vHUB
 - All the address prefixes coming from vHUB will be advertised to the NVA, which will readvertise to the ARS
 
 Result of all this?
 
-The result is that you will no longer need UDRs on your spoke VNETs: all the IP ranges coming from vHUB will automatically have the IP of your NVA (or the load balancer in front of it, if it’s a cluster) as nexthop.
-Similarly, from the point of view of the vHUB, all the ranges of the spokes will automatically have the NVA IP (or load balancer IP) as nexhop
+The result is that **you will no longer need UDRs on your spoke VNETs:** all the IP ranges coming from vHUB will automatically have the IP of your NVA (or the load balancer in front of it, if it’s a cluster) as nexthop.
+Similarly, from the point of view of the vHUB, **all the ranges of the spokes will automatically have the NVA IP (or load balancer IP) as nexhop**
 As discussed previously, today you will be able to leverage this kind of setup only considering Active/Standby clusters of NVAs, since the BGP-endpoint technology between NVA and vHUB doesn’t support BGP custom-next-hops definitions… but this limitation is supposed to disappear within 2024.
 
 Basing on this, we can say that – even in scenarios where you had to stay sticky to the INDIRECT spoke model -  you still have possibility to simplify your routing with BGP and you’re not forced to the use of Static Routes in the vHUB’s route table and routes’ aggregation.
