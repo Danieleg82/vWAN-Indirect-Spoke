@@ -51,6 +51,8 @@ Without any doubt, moving toward the DIRECT spoke connectivity model brings a lo
 -	The IP ranges of your spoke VNETs are automatically propagated to your branches and between HUBs, hence you don’t need to leverage on routes’ aggregations (static routes) nor you need to configure BGP between the vHUBs and any appliance.
 -	You reduce VNET peering costs
 -	With **Routing Intent** feature, you can leverage automatic Inter-HUB and Branch-2-Branch firewall filtering
+
+
 …but this doesn’t mean that such migration is always possible, nor always recommended, depending on your needs.
 
 ## SCENARIO 1: MY FAVOURITE FIREWALL BRAND CANNOT BE INTEGRATED WITH vWAN
