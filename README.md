@@ -75,6 +75,7 @@ If – for any reason – you need to use a firewall solution that is not in the
 
 When you decide to leverage a FW solution which is integrated inside a vHUB, from one side you have all the facilitations of the integration, but from the other side you do not have the kind of control on the FW solution you could have with a VM-based deployment of the same in a spoke VNET. (see https://learn.microsoft.com/en-us/azure/virtual-wan/about-nva-hub )
 If you need the full control on your FW cluster solution, the INDIRECT spoke model is likely still plausible and valid for you.
+
 _BENEFITs:_
 - You can scale your FW (or generally speaking, NVA) solution the way you prefer, either horizontally ( = more VMs in your cluster)  or vertically ( = changing your VMs SKU when possible)
 -	You can leverage the flexibility of the TRANSIT VNET to build different FW clusters for different purposes – if needed (i.e. E/W cluster + N/S cluster), including connectivity appliances (i.e. 3rd party SDWAN / IPSEC gateways)
@@ -141,7 +142,7 @@ Result of all this?
 The result is that **you will no longer need UDRs on your spoke VNETs:** all the IP ranges coming from vHUB will automatically have the IP of your NVA (or the load balancer in front of it, if it’s a cluster) as nexthop.
 
 
-Similarly, from the point of view of the vHUB, **all the ranges of the spokes will automatically have the NVA IP (or load balancer IP) as nexhop, and the NVA will receive from ARS the specific granular ranges of all the spoke VNETs dynamically**
+Similarly, from the point of view of the vHUB, **all the ranges of the spokes will automatically have the NVA IP (or load balancer IP) as nexhop, and the NVA will receive from ARS the specific granular ranges of all the spoke VNETs dynamically**.
 
 
 As discussed previously, today you will be able to leverage this kind of setup only considering Active/Standby clusters of NVAs, since the BGP-endpoint technology between NVA and vHUB doesn’t support BGP custom-next-hops definitions… but this limitation is supposed to disappear within 2024.
